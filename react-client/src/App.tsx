@@ -1,36 +1,76 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
+import { BrowserRouter as Router, Route, Routes, Link } from 'react-router-dom';
+import CreateQuestionsPage from './pages/CreateQuestionsPage';
+import ViewQuestionsPage  from './pages/ViewQuestionsPage ';
 import './App.css'
-import Field from './components/Field';
-import Grid from './components/Grid'
+
+/**
+ * define the interface for the questions in state
+ * Question data
+ * [{"id":1,"question":"Rate how productive you have been today","answer":"","username":"admin"}]
+ */
+interface Question {
+  id: number,
+  question: string,
+  answer: string,
+  username: string
+};
 
 function App() {
-  const [count, setCount] = useState(0)
 
-  // const response = fetch('http://localhost:5002/api/board/cleanBoard', {
-  //   method: 'GET', 
-  //   headers: {
-  //     'Content-Type': 'application/json', // Content type if you're sending JSON
-  //   },
-  // });
+  const [question, setQuestions] = useState<Question[]>([]);
 
-  // const data = response;
+  // Function to add a question to the shared state
+  const addQuestion = async (newQuestion: Question) => {
+    setQuestions((prevQuestions) => [...prevQuestions, newQuestion]);
+
+    const response = await fetch("http://localhost:5002/api/questions/create",{
+        method: "POST",
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(newQuestion),
+      })
+
+    if (!response.ok) {
+      throw new Error('Failed to create the question');
+    }
+
+
+  };
+
+  useEffect(() =>{
+    const fetchQuestionsData = async () => {
+      const response = await fetch('http://localhost:5002/api/questions/index');
+        if (!response.ok) {
+          throw new Error('Failed to fetch questions');
+        }
+        const data: Question[] = await response.json();
+
+        setQuestions(data);
+    }
+    fetchQuestionsData();
+  }, []);
 
   return (
     <>
-      <h1>Tic Tac Toe</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-      </div>
-      <div>
-        <Field occupied='x'/>
-        <Field occupied='x'/>
-      </div>
-      <div>
-        <Grid />
-      </div>
-      
+      <Router>
+        <div className='app'>
+          <nav>
+            <button>
+              <Link to="/create">Create Questions</Link>
+            </button>
+            <button>
+              <Link to="/view">View Questions</Link>
+            </button>
+          </nav>
+
+          <Routes>
+            <Route path="/create" element={<CreateQuestionsPage  addQuestion={addQuestion}/>} />
+            <Route path="/view" element={<ViewQuestionsPage questions={question} />} />
+          </Routes>
+        </div>    
+      </Router>  
     </>
   )
 }
