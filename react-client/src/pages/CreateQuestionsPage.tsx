@@ -14,12 +14,14 @@ interface CreateQuestionsPageProps {
 
 const CreateQuestionsPage: React.FC<CreateQuestionsPageProps> = ( {addQuestion} ) => {
     // State to store questions input
-    const [questions, setQuestions] = useState<string[]>(["", "", ""]); // Start with 3 empty question fields
+    const [questions, setQuestions] = useState<Question[]>([
+      { id: 0, question: "", answer: "", username: "admin" }
+    ]); 
 
     // Handle change in a question field
     const handleInputChange = (index: number, value: string) => {
         const updatedQuestions = [...questions];
-        updatedQuestions[index] = value; // Update the question at the specific index
+        updatedQuestions[index].question = value; // Update the question at the specific index
         setQuestions(updatedQuestions); // Update the state with the new question list
     };
 
@@ -33,29 +35,51 @@ const CreateQuestionsPage: React.FC<CreateQuestionsPageProps> = ( {addQuestion} 
 
         // loop through each item and validat then add to the state
         // questions.
+        // Loop through all questions and send them to the parent component via addQuestion function
+        questions.forEach((questionObject, index) => {
+            if (questionObject.trim()) { // Only send valid (non-empty) questions
+              const newQuestion: Question = {
+                id: index, // You can generate the ID however you'd like
+                question: questionObject.question,
+                answer: questionObject.answer, // Default empty answer
+                username: questionObject.username, // Or use the current logged-in user's username
+            };
+    
+            // Call the addQuestion function passed from App
+            addQuestion(newQuestion);
+            }
+        });
+  
+      // Optionally, reset form fields after submission
+      setQuestions(["", "", ""]); // Clear the form after submission (or keep questions if you prefer)
     };
 
 
     return (
         <div>
-            <h2>Create Questions</h2>
-            <form>
+          <h2>Create Questions</h2>
+          <form onSubmit={handleSubmit}>
             {questions.map((question, index) => (
-                <div key={index}>
+              <div key={index}>
                 <input
-                    type="text"
-                    value={question}
-                    onChange={(e) => handleInputChange(index, e.target.value)}
-                    placeholder={`Question ${index + 1}`}
+                  type="text"
+                  value={question}
+                  onChange={(e) => handleInputChange(index, e.target.value)}
+                  placeholder={`Question ${index + 1}`}
                 />
-                </div>
+              </div>
             ))}
             <div>
-                <button type="button" onClick={addQuestion}>Add More Questions</button>
+              <button type="button" onClick={handleAddQuestion}>
+                Add More Questions
+              </button>
             </div>
-            </form>
+            <div>
+              <button type="submit">Submit Questions</button>
+            </div>
+          </form>
         </div>
-    );
+      );
 };
 
 export default CreateQuestionsPage;
