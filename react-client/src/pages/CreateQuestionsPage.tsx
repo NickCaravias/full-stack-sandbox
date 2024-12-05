@@ -19,11 +19,11 @@ const CreateQuestionsPage: React.FC<CreateQuestionsPageProps> = ( {addQuestion} 
     ]); 
 
     // Handle change in a question field
-    const handleInputChange = (index: number, value: string) => {
-        const updatedQuestions = [...questions];
-        updatedQuestions[index].question = value; // Update the question at the specific index
-        setQuestions(updatedQuestions); // Update the state with the new question list
-    };
+    // const handleInputChange = (index: number, value: string) => {
+    //     const updatedQuestions = [...questions];
+    //     updatedQuestions[index].question = value; // Update the question at the specific index
+    //     setQuestions(updatedQuestions); // Update the state with the new question list
+    // };
 
     // Handle adding a new question input field
     const handleAddQuestion = () => {
