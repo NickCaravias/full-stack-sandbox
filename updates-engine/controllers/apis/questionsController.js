@@ -25,6 +25,7 @@ const createQuestion = async (req, res) => {
 const updateQuestion = async (req, res) => {
     try {
         const { id, question, answer, username } = req.body;
+
         const updatedQuestion = Question.update(
             { question: question, 
               answer: answer, 
@@ -46,5 +47,6 @@ const updateQuestion = async (req, res) => {
 
 module.exports = {
     indexQuestions,
-    createQuestion
+    createQuestion, 
+    updateQuestion
 }
