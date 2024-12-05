@@ -1,7 +1,10 @@
-import { useEffect, useState } from 'react'
+
+
+import { useEffect, useState, useCallback } from 'react'
 import { BrowserRouter as Router, Route, Routes, Link } from 'react-router-dom';
 import CreateQuestionsPage from './pages/CreateQuestionsPage';
 import ViewQuestionsPage  from './pages/ViewQuestionsPage ';
+import AnswerQuestionsPage from './pages/AnswerQuestionsPage';
 import './App.css'
 
 /**
@@ -20,8 +23,33 @@ function App() {
 
   const [question, setQuestions] = useState<Question[]>([]);
 
+  const updateAnswerState = (id: number, newAnswer: string) => {
+    setQuestions((prevQuestions) => 
+      prevQuestions.map((question) => 
+      question.id === id ? {...question, answer: newAnswer} : question)
+    );
+
+  };  
+
+  // todo useEffect
+  const updateQuestion = async (question: Question) => {
+    try {
+      const response = await fetch("http://localhost:5002/api/questions/update", 
+      {
+        method: "POST",
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(question)
+      }) } catch {
+        const errorMSg = "Could not update question with ID" + question.id;
+        throw new Error(errorMSg);
+      }
+    };
+
+  // todo useEffect
   // Function to add a question to the shared state
-  const addQuestion = async (newQuestion: Question) => {
+  const addQuestion = useCallback(async (newQuestion: Question) => {
     setQuestions((prevQuestions) => [...prevQuestions, newQuestion]);
 
     const response = await fetch("http://localhost:5002/api/questions/create",{
@@ -37,7 +65,7 @@ function App() {
     }
 
 
-  };
+  }, []);
 
   useEffect(() =>{
     const fetchQuestionsData = async () => {
@@ -57,17 +85,33 @@ function App() {
       <Router>
         <div className='app'>
           <nav>
-            <button>
+            <h1> Sandbox </h1>
+            <h2> Manager to Employee Updates Tool </h2>
+            <button className='button-pages'>
               <Link to="/create">Create Questions</Link>
             </button>
-            <button>
+            <button className='button-pages'>
               <Link to="/view">View Questions</Link>
+            </button>
+            <button className='button-pages'>
+              <Link to="/answer"> Answer Questions</Link>
             </button>
           </nav>
 
           <Routes>
-            <Route path="/create" element={<CreateQuestionsPage  addQuestion={addQuestion}/>} />
-            <Route path="/view" element={<ViewQuestionsPage questions={question} />} />
+            <Route 
+              path="/create" 
+              element={<CreateQuestionsPage addQuestion={addQuestion}/>} 
+            />
+            <Route 
+              path="/view" 
+              element={<ViewQuestionsPage questions={question} />} 
+            />
+            <Route 
+              path='/answer'
+              element={<AnswerQuestionsPage questions={question} updateQuestion={updateQuestion} updateAnswerState={updateAnswerState} /> }
+            />
+            
           </Routes>
         </div>    
       </Router>  
