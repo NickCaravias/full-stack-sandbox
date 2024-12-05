@@ -23,6 +23,31 @@ function App() {
 
   const [question, setQuestions] = useState<Question[]>([]);
 
+  const updateAnswerState = (id: number, newAnswer: string) => {
+    setQuestions((prevQuestions) => 
+      prevQuestions.map((question) => 
+      question.id === id ? {...question, answer: newAnswer} : question)
+    );
+
+  };  
+
+  // todo useEffect
+  const updateQuestion = async (question: Question) => {
+    try {
+      const response = await fetch("http://localhost:5002/api/questions/update", 
+      {
+        method: "POST",
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(question)
+      }) } catch {
+        const errorMSg = "Could not update question with ID" + question.id;
+        throw new Error(errorMSg);
+      }
+    };
+
+  // todo useEffect
   // Function to add a question to the shared state
   const addQuestion = useCallback(async (newQuestion: Question) => {
     setQuestions((prevQuestions) => [...prevQuestions, newQuestion]);
@@ -84,7 +109,7 @@ function App() {
             />
             <Route 
               path='/answer'
-              element={<AnswerQuestionsPage /> }
+              element={<AnswerQuestionsPage questions={question} updateQuestion={updateQuestion} updateAnswerState={updateAnswerState} /> }
             />
             
           </Routes>

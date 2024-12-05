@@ -27,7 +27,7 @@ const CreateQuestionsPage: React.FC<CreateQuestionsPageProps> = ( {addQuestion} 
 
     // Handle adding a new question input field
     const handleAddQuestion = () => {
-        setQuestions((prevQuestions) => [...prevQuestions, ""]); // Add an empty string for a new question
+        setQuestions((prevQuestions) => [...prevQuestions, new Question]); // Add an empty string for a new question
     };
 
     const handleSubmit = (e: React.FormEvent) => {
@@ -36,22 +36,21 @@ const CreateQuestionsPage: React.FC<CreateQuestionsPageProps> = ( {addQuestion} 
         // loop through each item and validat then add to the state
         // questions.
         // Loop through all questions and send them to the parent component via addQuestion function
-        questions.forEach((questionObject, index) => {
-            if (questionObject.trim()) { // Only send valid (non-empty) questions
-              const newQuestion: Question = {
-                id: index, // You can generate the ID however you'd like
-                question: questionObject.question,
-                answer: questionObject.answer, // Default empty answer
-                username: questionObject.username, // Or use the current logged-in user's username
-            };
-    
-            // Call the addQuestion function passed from App
-            addQuestion(newQuestion);
-            }
+        questions.forEach((questionObject, index) => {  
+          const newQuestion: Question = {
+            id: index, // You can generate the ID however you'd like
+            question: questionObject.question,
+            answer: questionObject.answer, // Default empty answer
+            username: questionObject.username, // Or use the current logged-in user's username
+          };
+  
+          // Call the addQuestion function passed from App
+          addQuestion(newQuestion);
+            
         });
   
       // Optionally, reset form fields after submission
-      setQuestions(["", "", ""]); // Clear the form after submission (or keep questions if you prefer)
+      setQuestions([""]); // Clear the form after submission (or keep questions if you prefer)
     };
 
 
@@ -63,7 +62,7 @@ const CreateQuestionsPage: React.FC<CreateQuestionsPageProps> = ( {addQuestion} 
               <div key={index}>
                 <input
                   type="text"
-                  value={question}
+                  value={question.question}
                   onChange={(e) => handleInputChange(index, e.target.value)}
                   placeholder={`Question ${index + 1}`}
                 />
