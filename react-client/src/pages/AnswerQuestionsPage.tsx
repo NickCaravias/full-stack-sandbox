@@ -38,6 +38,7 @@ const AnswerQuestionsPage: React.FC<AnswerQuestionsPageProps> = ( { questions, u
       updateQuestion(answeredQuestion);
     });
     
+    
   }
 
   return (

@@ -1,0 +1,44 @@
+.navbar {
+    background-color: white;  /* White background */
+    color: #333;  /* Dark text color for contrast */
+    padding: 15px 30px;  /* Padding for the navbar */
+    position: fixed;  /* Fix the navbar at the top */
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 1000;  /* Ensure it's on top of other content */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Optional: subtle shadow below navbar */
+  }
+  
+  .navbar h1, .navbar h2 {
+    margin: 0;  /* Remove margin from h1 and h2 */
+    color: #4CAF50;  /* Green color for titles */
+  }
+  
+  .navbar-links {
+    margin-top: 10px;
+    display: flex;
+    justify-content: center;  /* Center the navigation buttons */
+  }
+  
+  .button-pages {
+    margin: 0 15px;
+    padding: 12px 20px;
+    background-color: #4CAF50;  /* Green button background */
+    color: white;  /* White text */
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+    font-size: 16px;
+    text-align: center;
+  }
+  
+  .button-pages a {
+    text-decoration: none;
+    color: white;  /* White text in links */
+  }
+  
+  .button-pages:hover {
+    background-color: #45a049;  /* Darker green on hover */
+  }
+  

@@ -46,3 +46,30 @@
   padding: 7%;
   margin: 2%;
 }
+
+/* for nav bar */
+
+.app {
+  display: flex;
+  flex-direction: column;
+  height: 100vh; /* Make sure the whole screen is used */
+}
+
+.content {
+  flex: 1; /* This allows the content to take the remaining space below the navbar */
+  padding-top: 80px; /* Ensure there's space below the fixed navbar */
+  overflow-y: auto; /* Allow scrolling if content overflows */
+}
+
+/* Optionally you can add styles for the pages */
+h2 {
+  margin-bottom: 20px;
+}
+
+ul {
+  list-style-type: none;
+}
+
+li {
+  margin: 10px 0;
+}
